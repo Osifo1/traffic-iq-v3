@@ -163,7 +163,7 @@ const MobileAlerts = ({ user }: MobileAlertsProps) => {
       <div className="space-y-4">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-foreground">Mobile Alerts</h1>
-          <p className="text-sm text-gray-900">
+          <p className="text-sm text-foreground">
             Active traffic incidents requiring attention
           </p>
         </div>
@@ -291,7 +291,7 @@ const MobileAlerts = ({ user }: MobileAlertsProps) => {
       )}
 
       {/* Footer Info */}
-      <div className="text-center text-sm text-gray-800 pt-4">
+      <div className="text-center text-sm text-foreground pt-4">
         <p>Showing Open and Watchlist Match incidents</p>
         <p className="text-xs mt-1">Last updated: {new Date().toLocaleTimeString()}</p>
       </div>

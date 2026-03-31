@@ -15,8 +15,8 @@ const StatCard = ({
 }: {
   label: string; value: number | string; icon: React.ElementType; color: string;
 }) => (
-  <div className="glow-card p-5">
-    <div className="flex items-center justify-between mb-3">
+  <div className="glow-card p-3">
+    <div className="flex items-center justify-between mb-1">
       <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
         {label}
       </span>
@@ -47,6 +47,16 @@ interface Feed {
   fileName: string;
 }
 
+interface ManualIncident {
+  id: string;
+  camera: string;
+  incident_type: string;
+  plate_text: string;
+  notes: string;
+  created_at: string;
+  status: string;
+}
+
 interface User {
   role: "traffic_officer" | "agency_director" | "toll_operator";
   name: string;
@@ -55,10 +65,11 @@ interface User {
 interface DashboardProps {
   feeds: Feed[];
   user: User;
+  manualIncidents: ManualIncident[];
 }
 
-const Dashboard = ({ feeds, user }: DashboardProps) => {
-  const [selectedCamera, setSelectedCamera] = useState(cameraFeeds[0].name);
+const Dashboard = ({ feeds, user, manualIncidents }: DashboardProps) => {
+  const [selectedCamera, setSelectedCamera] = useState("All Feeds");
   const fetcher = useCallback(() => fetchStats(), []);
   const { data: stats, loading, error, retry } = useApi(fetcher);
 
@@ -142,20 +153,89 @@ const Dashboard = ({ feeds, user }: DashboardProps) => {
               onChange={(e) => setSelectedCamera(e.target.value)}
               className="text-xs bg-muted border border-border rounded-md px-3 py-1.5 text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
             >
-              <option value="__all__">All Feeds</option>
-              {cameraFeeds.map((f) => (
-                <option key={f.id} value={f.name}>{f.name}</option>
-              ))}
+              <option value="All Feeds">All Feeds</option>
+              <option value="Airport Road Feed">Airport Road Feed</option>
+              <option value="Sapele Road Feed">Sapele Road Feed</option>
+              <option value="Ring Road Checkpoint">Ring Road Checkpoint</option>
+              <option value="Aduwawa Corridor">Aduwawa Corridor</option>
             </select>
           </div>
-          {selectedCamera === "__all__" ? (
+          {selectedCamera === "All Feeds" ? (
             <div className="grid grid-cols-2 gap-2">
-              {cameraFeeds.map((feed) => (
-                <div key={feed.id} className="relative aspect-video rounded-lg bg-muted overflow-hidden border border-border">
+              {feeds[0] && (
+                <div className="relative aspect-video rounded-lg bg-muted overflow-hidden border border-border">
+                  <video
+                    src={feeds[0].url}
+                    autoPlay
+                    muted
+                    loop
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute top-1.5 left-1.5 bg-background/80 backdrop-blur-sm rounded px-1.5 py-0.5 text-[8px] font-mono text-primary">
+                    CAM-01
+                  </div>
+                  <div className="absolute top-1.5 right-1.5 bg-background/80 backdrop-blur-sm rounded px-1.5 py-0.5 text-[8px] font-mono text-primary">
+                    Airport Road Feed
+                  </div>
+                </div>
+              )}
+              {feeds[1] && (
+                <div className="relative aspect-video rounded-lg bg-muted overflow-hidden border border-border">
+                  <video
+                    src={feeds[1].url}
+                    autoPlay
+                    muted
+                    loop
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute top-1.5 left-1.5 bg-background/80 backdrop-blur-sm rounded px-1.5 py-0.5 text-[8px] font-mono text-primary">
+                    CAM-02
+                  </div>
+                  <div className="absolute top-1.5 right-1.5 bg-background/80 backdrop-blur-sm rounded px-1.5 py-0.5 text-[8px] font-mono text-primary">
+                    Sapele Road Feed
+                  </div>
+                </div>
+              )}
+              {feeds[2] && (
+                <div className="relative aspect-video rounded-lg bg-muted overflow-hidden border border-border">
+                  <video
+                    src={feeds[2].url}
+                    autoPlay
+                    muted
+                    loop
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute top-1.5 left-1.5 bg-background/80 backdrop-blur-sm rounded px-1.5 py-0.5 text-[8px] font-mono text-primary">
+                    CAM-03
+                  </div>
+                  <div className="absolute top-1.5 right-1.5 bg-background/80 backdrop-blur-sm rounded px-1.5 py-0.5 text-[8px] font-mono text-primary">
+                    Ring Road Checkpoint
+                  </div>
+                </div>
+              )}
+              {feeds[3] && (
+                <div className="relative aspect-video rounded-lg bg-muted overflow-hidden border border-border">
+                  <video
+                    src={feeds[3].url}
+                    autoPlay
+                    muted
+                    loop
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute top-1.5 left-1.5 bg-background/80 backdrop-blur-sm rounded px-1.5 py-0.5 text-[8px] font-mono text-primary">
+                    CAM-04
+                  </div>
+                  <div className="absolute top-1.5 right-1.5 bg-background/80 backdrop-blur-sm rounded px-1.5 py-0.5 text-[8px] font-mono text-primary">
+                    Aduwawa Corridor
+                  </div>
+                </div>
+              )}
+              {!feeds[0] && (
+                <div className="relative aspect-video rounded-lg bg-muted overflow-hidden border border-border">
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="text-center space-y-1">
                       <Camera className="w-6 h-6 text-muted-foreground/40 mx-auto" />
-                      <p className="text-[10px] text-muted-foreground">{feed.name}</p>
+                      <p className="text-[10px] text-muted-foreground">Airport Road Feed</p>
                       <div className="flex items-center gap-1 justify-center">
                         <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse-glow" />
                         <span className="text-[9px] text-primary font-medium">Live</span>
@@ -163,82 +243,221 @@ const Dashboard = ({ feeds, user }: DashboardProps) => {
                     </div>
                   </div>
                   <div className="absolute top-1.5 left-1.5 bg-background/80 backdrop-blur-sm rounded px-1.5 py-0.5 text-[8px] font-mono text-primary">
-                    CAM-{String(feed.id).padStart(2, "0")}
+                    CAM-01
                   </div>
                 </div>
-              ))}
+              )}
+              {!feeds[1] && (
+                <div className="relative aspect-video rounded-lg bg-muted overflow-hidden border border-border">
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="text-center space-y-1">
+                      <Camera className="w-6 h-6 text-muted-foreground/40 mx-auto" />
+                      <p className="text-[10px] text-muted-foreground">Sapele Road Feed</p>
+                      <div className="flex items-center gap-1 justify-center">
+                        <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse-glow" />
+                        <span className="text-[9px] text-primary font-medium">Live</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="absolute top-1.5 left-1.5 bg-background/80 backdrop-blur-sm rounded px-1.5 py-0.5 text-[8px] font-mono text-primary">
+                    CAM-02
+                  </div>
+                </div>
+              )}
+              {!feeds[2] && (
+                <div className="relative aspect-video rounded-lg bg-muted overflow-hidden border border-border">
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="text-center space-y-1">
+                      <Camera className="w-6 h-6 text-muted-foreground/40 mx-auto" />
+                      <p className="text-[10px] text-muted-foreground">Ring Road Checkpoint</p>
+                      <div className="flex items-center gap-1 justify-center">
+                        <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse-glow" />
+                        <span className="text-[9px] text-primary font-medium">Live</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="absolute top-1.5 left-1.5 bg-background/80 backdrop-blur-sm rounded px-1.5 py-0.5 text-[8px] font-mono text-primary">
+                    CAM-03
+                  </div>
+                </div>
+              )}
+              {!feeds[3] && (
+                <div className="relative aspect-video rounded-lg bg-muted overflow-hidden border border-border">
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="text-center space-y-1">
+                      <Camera className="w-6 h-6 text-muted-foreground/40 mx-auto" />
+                      <p className="text-[10px] text-muted-foreground">Aduwawa Corridor</p>
+                      <div className="flex items-center gap-1 justify-center">
+                        <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse-glow" />
+                        <span className="text-[9px] text-primary font-medium">Live</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="absolute top-1.5 left-1.5 bg-background/80 backdrop-blur-sm rounded px-1.5 py-0.5 text-[8px] font-mono text-primary">
+                    CAM-04
+                  </div>
+                </div>
+              )}
             </div>
           ) : (
             <div className="relative aspect-video rounded-lg bg-muted overflow-hidden border border-border">
-  {feeds.length > 0 ? (
-  <div className="grid grid-cols-2 gap-1 w-full h-full">
-    {feeds.filter(Boolean).slice(0, 4).map((feed, i) => (
-      <div key={i} className="relative overflow-hidden">
-        <video
-          src={feed.url}
-          autoPlay
-          muted
-          loop
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute top-1 left-1 bg-background/80 backdrop-blur-sm rounded px-1.5 py-0.5 text-[8px] font-mono text-primary">
-          {feed.name}
-        </div>
-        <div className="absolute top-1 right-1 flex items-center gap-1">
-          <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-          <span className="text-[8px] text-primary">Live</span>
-        </div>
-      </div>
-    ))}
-  </div>
-) : (
-  <div className="absolute inset-0 flex items-center justify-center">
-    <div className="text-center space-y-2">
-      <Camera className="w-12 h-12 text-muted-foreground/40 mx-auto" />
-      <p className="text-sm text-muted-foreground">No feeds loaded</p>
-      <p className="text-xs text-muted-foreground/60">
-        Upload clips on the Live Feed page
-      </p>
-    </div>
-  </div>
-)}
-</div>
+              {selectedCamera === "Airport Road Feed" && feeds[0] ? (
+                <>
+                  <video
+                    src={feeds[0].url}
+                    autoPlay
+                    muted
+                    loop
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute top-1.5 left-1.5 bg-background/80 backdrop-blur-sm rounded px-1.5 py-0.5 text-[8px] font-mono text-primary">
+                    CAM-01
+                  </div>
+                  <div className="absolute top-1.5 right-1.5 bg-background/80 backdrop-blur-sm rounded px-1.5 py-0.5 text-[8px] font-mono text-primary">
+                    Airport Road Feed
+                  </div>
+                </>
+              ) : selectedCamera === "Airport Road Feed" && !feeds[0] ? (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="text-center space-y-2">
+                    <Camera className="w-12 h-12 text-muted-foreground/40 mx-auto" />
+                    <p className="text-sm text-muted-foreground">Airport Road Feed</p>
+                    <p className="text-xs text-muted-foreground/60">No clip loaded for this feed</p>
+                  </div>
+                </div>
+              ) : selectedCamera === "Sapele Road Feed" && feeds[1] ? (
+                <>
+                  <video
+                    src={feeds[1].url}
+                    autoPlay
+                    muted
+                    loop
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute top-1.5 left-1.5 bg-background/80 backdrop-blur-sm rounded px-1.5 py-0.5 text-[8px] font-mono text-primary">
+                    CAM-02
+                  </div>
+                  <div className="absolute top-1.5 right-1.5 bg-background/80 backdrop-blur-sm rounded px-1.5 py-0.5 text-[8px] font-mono text-primary">
+                    Sapele Road Feed
+                  </div>
+                </>
+              ) : selectedCamera === "Sapele Road Feed" && !feeds[1] ? (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="text-center space-y-2">
+                    <Camera className="w-12 h-12 text-muted-foreground/40 mx-auto" />
+                    <p className="text-sm text-muted-foreground">Sapele Road Feed</p>
+                    <p className="text-xs text-muted-foreground/60">No clip loaded for this feed</p>
+                  </div>
+                </div>
+              ) : selectedCamera === "Ring Road Checkpoint" && feeds[2] ? (
+                <>
+                  <video
+                    src={feeds[2].url}
+                    autoPlay
+                    muted
+                    loop
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute top-1.5 left-1.5 bg-background/80 backdrop-blur-sm rounded px-1.5 py-0.5 text-[8px] font-mono text-primary">
+                    CAM-03
+                  </div>
+                  <div className="absolute top-1.5 right-1.5 bg-background/80 backdrop-blur-sm rounded px-1.5 py-0.5 text-[8px] font-mono text-primary">
+                    Ring Road Checkpoint
+                  </div>
+                </>
+              ) : selectedCamera === "Ring Road Checkpoint" && !feeds[2] ? (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="text-center space-y-2">
+                    <Camera className="w-12 h-12 text-muted-foreground/40 mx-auto" />
+                    <p className="text-sm text-muted-foreground">Ring Road Checkpoint</p>
+                    <p className="text-xs text-muted-foreground/60">No clip loaded for this feed</p>
+                  </div>
+                </div>
+              ) : selectedCamera === "Aduwawa Corridor" && feeds[3] ? (
+                <>
+                  <video
+                    src={feeds[3].url}
+                    autoPlay
+                    muted
+                    loop
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute top-1.5 left-1.5 bg-background/80 backdrop-blur-sm rounded px-1.5 py-0.5 text-[8px] font-mono text-primary">
+                    CAM-04
+                  </div>
+                  <div className="absolute top-1.5 right-1.5 bg-background/80 backdrop-blur-sm rounded px-1.5 py-0.5 text-[8px] font-mono text-primary">
+                    Aduwawa Corridor
+                  </div>
+                </>
+              ) : selectedCamera === "Aduwawa Corridor" && !feeds[3] ? (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="text-center space-y-2">
+                    <Camera className="w-12 h-12 text-muted-foreground/40 mx-auto" />
+                    <p className="text-sm text-muted-foreground">Aduwawa Corridor</p>
+                    <p className="text-xs text-muted-foreground/60">No clip loaded for this feed</p>
+                  </div>
+                </div>
+              ) : null}
+            </div>
           )}
         </div>
 
-        {/* Plate log */}
+        {/* Live Incident Feed */}
         <div className="lg:col-span-2 glow-card p-4 space-y-3">
-          <h2 className="text-sm font-semibold text-foreground">Real-Time Plate Log</h2>
-          <div className="overflow-auto max-h-[400px] scrollbar-thin">
-            <table className="w-full text-xs">
-              <thead>
-                <tr className="text-muted-foreground border-b border-border">
-                  <th className="text-left py-2 font-medium">Plate</th>
-                  <th className="text-left py-2 font-medium">Type</th>
-                  <th className="text-left py-2 font-medium">Camera</th>
-                  <th className="text-right py-2 font-medium">Conf.</th>
-                </tr>
-              </thead>
-              <tbody>
-                {recentPlates.length > 0 ? recentPlates.slice(0, 8).map((entry: any, i: number) => (
-                  <tr
-                    key={i}
-                    className={`border-b border-border/50 ${i % 2 === 0 ? "bg-muted/30" : ""}`}
-                  >
-                    <td className="py-2 font-mono font-medium text-foreground">{entry.canonical_plate || entry.plate}</td>
-                    <td className="py-2 text-muted-foreground">{entry.vehicle_type || entry.vehicleType}</td>
-                    <td className="py-2 text-muted-foreground">{entry.camera}</td>
-                    <td className="py-2 text-right">
-                      <span className={(entry.best_confidence || entry.confidence) > 90 ? "text-primary" : "text-amber"}>
-                        {((entry.best_confidence || entry.confidence) * 1).toFixed(1)}%
-                      </span>
-                    </td>
-                  </tr>
-                )) : (
-                  <tr><td colSpan={4} className="py-8 text-center text-muted-foreground">No recent plates</td></tr>
-                )}
-              </tbody>
-            </table>
+          <h2 className="text-sm font-semibold text-foreground">Live Incident Feed</h2>
+          <p className="text-xs text-muted-foreground">
+            Real-time alerts from active camera feeds
+          </p>
+          <div className="space-y-2">
+            {manualIncidents.length > 0 ? (
+              manualIncidents.slice().reverse().slice(0, 5).map((incident, i) => {
+                const getBorderClass = (type: string) => {
+                  switch (type) {
+                    case "Watchlist Match": return "border-l-4 border-l-destructive";
+                    case "Stall": return "border-l-4 border-l-orange-500";
+                    case "Queue Jump": return "border-l-4 border-l-amber-500";
+                    case "Wrong Way": return "border-l-4 border-l-amber-500";
+                    case "Congestion": return "border-l-4 border-l-yellow-500";
+                    default: return "border-l-4 border-l-border";
+                  }
+                };
+
+                const getTimeAgo = (createdAt: string) => {
+                  const now = new Date();
+                  const incidentTime = new Date(createdAt);
+                  const diffMinutes = Math.floor((now.getTime() - incidentTime.getTime()) / (1000 * 60));
+                  
+                  if (diffMinutes < 1) return "Just now";
+                  if (diffMinutes < 60) return `${diffMinutes} minutes ago`;
+                  return `${Math.floor(diffMinutes / 60)} hours ago`;
+                };
+
+                return (
+                  <div key={incident.id} className={`glow-card p-3 border ${getBorderClass(incident.incident_type)}`}>
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex-1">
+                        <div className="font-semibold text-foreground text-sm">{incident.incident_type}</div>
+                        <div className="text-xs text-muted-foreground">{incident.camera}</div>
+                        <div className="font-mono text-xs text-foreground mt-1">{incident.plate_text}</div>
+                        <div className="text-xs text-muted-foreground">{getTimeAgo(incident.created_at)}</div>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                        <span className="text-[8px] text-green-400 font-medium">LIVE</span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })
+            ) : (
+              <div className="text-center py-8">
+                <Camera className="w-12 h-12 text-muted-foreground/40 mx-auto" />
+                <div className="mt-2">
+                  <p className="text-sm text-muted-foreground">No active incidents</p>
+                  <p className="text-xs text-muted-foreground/60">Trigger an incident from Live Feed page</p>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

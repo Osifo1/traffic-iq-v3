@@ -1,4 +1,4 @@
-import { Upload, Play, X, Camera } from "lucide-react";
+import { Upload, Play, X, Camera, AlertTriangle, ShieldAlert, Car, Navigation } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useRef } from "react";
 
@@ -15,6 +15,16 @@ interface Feed {
   fileName: string;
 }
 
+interface ManualIncident {
+  id: string;
+  camera: string;
+  incident_type: string;
+  plate_text: string;
+  notes: string;
+  created_at: string;
+  status: string;
+}
+
 interface User {
   role: "traffic_officer" | "agency_director" | "toll_operator";
   name: string;
@@ -24,9 +34,11 @@ interface LiveFeedProps {
   feeds: Feed[];
   setFeeds: (feeds: Feed[]) => void;
   user: User;
+  manualIncidents: ManualIncident[];
+  setManualIncidents: (incidents: ManualIncident[]) => void;
 }
 
-const LiveFeed = ({ feeds, setFeeds, user }: LiveFeedProps) => {
+const LiveFeed = ({ feeds, setFeeds, user, manualIncidents, setManualIncidents }: LiveFeedProps) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [dragOver, setDragOver] = useState<number | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -248,6 +260,150 @@ const LiveFeed = ({ feeds, setFeeds, user }: LiveFeedProps) => {
                 className="h-full bg-primary rounded-full transition-all"
                 style={{ width: `${(feeds.filter(Boolean).length / 4) * 100}%` }}
               />
+            </div>
+          </div>
+
+          {/* Manual Incident Triggers */}
+          <div className="glow-card p-5 space-y-4 border-red-500/20">
+            <h2 className="text-sm font-semibold text-foreground">
+              Manual Incident Triggers
+            </h2>
+            <p className="text-xs text-muted-foreground">
+              Tap to simulate live CV detections
+            </p>
+
+            <div className="grid grid-cols-2 gap-3">
+              {/* Queue Jump Button */}
+              <div className="relative">
+                <Button
+                  onClick={() => {
+                    const newIncident = {
+                      id: Date.now().toString(),
+                      camera: "Airport Road Feed",
+                      incident_type: "Queue Jump",
+                      plate_text: "EDO-GWA-234",
+                      notes: "Vehicle jumped traffic queue at main intersection",
+                      created_at: new Date().toISOString(),
+                      status: "Open"
+                    };
+                    setManualIncidents(prev => [...prev, newIncident]);
+                    setTimeout(() => {
+                      const btn = document.getElementById('queue-jump-btn');
+                      if (btn) {
+                        const originalText = btn.textContent;
+                        btn.textContent = "Triggered!";
+                        setTimeout(() => {
+                          btn.textContent = originalText;
+                        }, 2000);
+                      }
+                    }, 0);
+                  }}
+                  className="w-full bg-amber-500 text-foreground hover:bg-amber-600 transition-colors"
+                  id="queue-jump-btn"
+                >
+                  <AlertTriangle className="w-4 h-4 mr-2" />
+                  Queue Jump
+                </Button>
+              </div>
+
+              {/* Watchlist Plate Button */}
+              <div className="relative">
+                <Button
+                  onClick={() => {
+                    const newIncident = {
+                      id: Date.now().toString(),
+                      camera: "Ring Road Checkpoint",
+                      incident_type: "Watchlist Match",
+                      plate_text: "EYGINBG",
+                      notes: "Flagged plate detected passing Ring Road Checkpoint",
+                      created_at: new Date().toISOString(),
+                      status: "Open"
+                    };
+                    setManualIncidents(prev => [...prev, newIncident]);
+                    setTimeout(() => {
+                      const btn = document.getElementById('watchlist-plate-btn');
+                      if (btn) {
+                        const originalText = btn.textContent;
+                        btn.textContent = "Triggered!";
+                        setTimeout(() => {
+                          btn.textContent = originalText;
+                        }, 2000);
+                      }
+                    }, 0);
+                  }}
+                  className="w-full bg-destructive text-destructive-foreground hover:bg-destructive/90 transition-colors"
+                  id="watchlist-plate-btn"
+                >
+                  <ShieldAlert className="w-4 h-4 mr-2" />
+                  Watchlist Plate
+                </Button>
+              </div>
+
+              {/* Stalled Vehicle Button */}
+              <div className="relative">
+                <Button
+                  onClick={() => {
+                    const newIncident = {
+                      id: Date.now().toString(),
+                      camera: "Sapele Road Feed",
+                      incident_type: "Stall",
+                      plate_text: "EDO-KJA-567",
+                      notes: "Vehicle stalled blocking outer lane for 12 seconds",
+                      created_at: new Date().toISOString(),
+                      status: "Open"
+                    };
+                    setManualIncidents(prev => [...prev, newIncident]);
+                    setTimeout(() => {
+                      const btn = document.getElementById('stalled-vehicle-btn');
+                      if (btn) {
+                        const originalText = btn.textContent;
+                        btn.textContent = "Triggered!";
+                        setTimeout(() => {
+                          btn.textContent = originalText;
+                        }, 2000);
+                      }
+                    }, 0);
+                  }}
+                  className="w-full bg-orange-500 text-foreground hover:bg-orange-600 transition-colors"
+                  id="stalled-vehicle-btn"
+                >
+                  <Car className="w-4 h-4 mr-2" />
+                  Stalled Vehicle
+                </Button>
+              </div>
+
+              {/* Wrong Way Button */}
+              <div className="relative">
+                <Button
+                  onClick={() => {
+                    const newIncident = {
+                      id: Date.now().toString(),
+                      camera: "Aduwawa Corridor",
+                      incident_type: "Wrong Way",
+                      plate_text: "EDO-BCA-891",
+                      notes: "Vehicle detected moving against traffic flow",
+                      created_at: new Date().toISOString(),
+                      status: "Open"
+                    };
+                    setManualIncidents(prev => [...prev, newIncident]);
+                    setTimeout(() => {
+                      const btn = document.getElementById('wrong-way-btn');
+                      if (btn) {
+                        const originalText = btn.textContent;
+                        btn.textContent = "Triggered!";
+                        setTimeout(() => {
+                          btn.textContent = originalText;
+                        }, 2000);
+                      }
+                    }, 0);
+                  }}
+                  className="w-full bg-purple-500 text-white hover:bg-purple-600 transition-colors"
+                  id="wrong-way-btn"
+                >
+                  <Navigation className="w-4 h-4 mr-2" />
+                  Wrong Way
+                </Button>
+              </div>
             </div>
           </div>
         </div>

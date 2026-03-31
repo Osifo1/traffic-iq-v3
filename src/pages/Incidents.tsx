@@ -22,9 +22,10 @@ const StatusBadge = ({ status }: { status: string }) => {
 const TypeBadge = ({ type }: { type: string }) => {
   const styles: Record<string, string> = {
     "Watchlist Match": "bg-destructive/10 text-destructive border-destructive/20",
-    Stall: "bg-orange-500/10 text-orange-400 border-orange-500/20",
-    Congestion: "bg-yellow-500/10 text-yellow-400 border-yellow-500/20",
-    Speeding: "bg-red-500/10 text-red-400 border-red-500/20",
+    "Stall": "bg-orange-500/10 text-orange-400 border-orange-500/20",
+    "Queue Jump": "bg-amber-500/10 text-amber-400 border-amber-500/20",
+    "Congestion": "bg-yellow-500/10 text-yellow-400 border-yellow-500/20",
+    "Speeding": "bg-red-500/10 text-red-400 border-red-500/20",
     "Wrong Way": "bg-purple-500/10 text-purple-400 border-purple-500/20",
   };
   return (
@@ -34,6 +35,16 @@ const TypeBadge = ({ type }: { type: string }) => {
   );
 };
 
+interface ManualIncident {
+  id: string;
+  camera: string;
+  incident_type: string;
+  plate_text: string;
+  notes: string;
+  created_at: string;
+  status: string;
+}
+
 interface User {
   role: "traffic_officer" | "agency_director" | "toll_operator";
   name: string;
@@ -41,9 +52,10 @@ interface User {
 
 interface IncidentsProps {
   user: User;
+  manualIncidents: ManualIncident[];
 }
 
-const Incidents = ({ user }: IncidentsProps) => {
+const Incidents = ({ user, manualIncidents }: IncidentsProps) => {
   const [statusFilter, setStatusFilter] = useState("All");
   const [typeFilter, setTypeFilter] = useState("All");
   const [cameraFilter, setCameraFilter] = useState("All");
@@ -212,6 +224,34 @@ const Incidents = ({ user }: IncidentsProps) => {
                 </tr>
               </thead>
               <tbody>
+                {/* Manual Incidents */}
+                {manualIncidents.slice().reverse().map((incident, i) => (
+                  <tr
+                    key={incident.id}
+                    className="border-b border-border/50 bg-destructive/5"
+                  >
+                    <td className="p-3 text-muted-foreground font-mono text-xs">
+                      #{String(incident.id).padStart(4, "0")}
+                    </td>
+                    <td className="p-3">
+                      <TypeBadge type={incident.incident_type} />
+                    </td>
+                    <td className="p-3 text-xs text-muted-foreground">{incident.camera}</td>
+                    <td className="p-3 font-mono text-xs text-foreground">
+                      {incident.plate_text}
+                    </td>
+                    <td className="p-3 text-xs text-muted-foreground font-mono">
+                      {incident.created_at ? new Date(incident.created_at).toLocaleString() : "N/A"}
+                    </td>
+                    <td className="p-3">
+                      <div className="flex items-center gap-1">
+                        <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                        <span className="text-[8px] text-green-400 font-medium">LIVE</span>
+                        <Badge variant="destructive" className="ml-2 text-xs">LIVE</Badge>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
                 {incidentList.map((incident: any, i: number) => (
                   <tr
                     key={incident.id}

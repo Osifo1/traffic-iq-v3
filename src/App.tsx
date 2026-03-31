@@ -23,6 +23,16 @@ interface Feed {
   fileName: string;
 }
 
+interface ManualIncident {
+  id: string;
+  camera: string;
+  incident_type: string;
+  plate_text: string;
+  notes: string;
+  created_at: string;
+  status: string;
+}
+
 interface User {
   role: "traffic_officer" | "agency_director" | "toll_operator";
   name: string;
@@ -33,6 +43,7 @@ const queryClient = new QueryClient();
 const App = () => {
   const [feeds, setFeeds] = useState<Feed[]>([]);
   const [user, setUser] = useState<User | null>(null);
+  const [manualIncidents, setManualIncidents] = useState<ManualIncident[]>([]);
 
   const handleLogin = (role: "traffic_officer" | "agency_director" | "toll_operator", name: string) => {
     setUser({ role, name });
@@ -62,14 +73,14 @@ const App = () => {
         <BrowserRouter>
           <Routes>
             <Route element={<AppLayout user={user} onLogout={handleLogout} />}>
-              <Route path="/" element={<Dashboard feeds={feeds} user={user} />} />
+              <Route path="/" element={<Dashboard feeds={feeds} user={user} manualIncidents={manualIncidents} />} />
               <Route
                 path="/live-feed"
-                element={<LiveFeed feeds={feeds} setFeeds={setFeeds} user={user} />}
+                element={<LiveFeed feeds={feeds} setFeeds={setFeeds} user={user} manualIncidents={manualIncidents} setManualIncidents={setManualIncidents} />}
               />
               <Route path="/plate-log" element={<PlateLog user={user} />} />
               <Route path="/analytics" element={<Analytics user={user} />} />
-              <Route path="/incidents" element={<Incidents user={user} />} />
+              <Route path="/incidents" element={<Incidents user={user} manualIncidents={manualIncidents} />} />
               <Route path="/offenders" element={<Offenders user={user} />} />
               <Route path="/reports" element={<Reports user={user} />} />
               <Route path="/mobile-alerts" element={<MobileAlerts user={user} />} />

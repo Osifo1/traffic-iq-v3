@@ -78,7 +78,7 @@ const Analytics = ({ user }: AnalyticsProps) => {
       {/* Predictive Insights Section */}
       <Card className="border-amber-500 bg-amber-50 dark:bg-amber-950/20">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2 font-semibold text-foreground">
             <TrendingUp className="h-5 w-5 text-amber-500" />
             Predictive Insights
           </CardTitle>
