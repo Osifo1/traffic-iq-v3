@@ -135,7 +135,7 @@ const Dashboard = ({ feeds, user, manualIncidents }: DashboardProps) => {
       )}
 
       {/* Stat cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard label="Total Vehicles Detected" value={totalVehicles} icon={Car} color="bg-primary/10 text-primary" />
 <StatCard label="Open Incidents" value={openIncidents} icon={AlertTriangle} color="bg-amber/10 text-amber" />
 <StatCard label="Active Camera Feeds" value={activeCameras} icon={Camera} color="bg-primary/10 text-primary" />

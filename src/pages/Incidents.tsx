@@ -128,7 +128,7 @@ const Incidents = ({ user, manualIncidents }: IncidentsProps) => {
       </div>
 
       {/* Summary cards */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <div className="glow-card p-4 flex items-center gap-3">
           <div className="w-9 h-9 rounded-lg bg-amber-500/10 flex items-center justify-center">
             <Clock className="w-5 h-5 text-amber-400" />
@@ -164,7 +164,7 @@ const Incidents = ({ user, manualIncidents }: IncidentsProps) => {
           <Filter className="w-4 h-4 text-muted-foreground" />
           <span className="text-xs font-medium text-foreground">Filters</span>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}

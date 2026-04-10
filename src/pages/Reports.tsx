@@ -270,7 +270,7 @@ const Reports = ({ user }: ReportsProps) => {
       </div>
 
       {/* Weekly Summary Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         <Card className="glow-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Incidents</CardTitle>
@@ -333,7 +333,7 @@ const Reports = ({ user }: ReportsProps) => {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <div className="space-y-2">
               <h4 className="font-medium text-foreground">PDF Report</h4>
               <p className="text-sm text-muted-foreground">

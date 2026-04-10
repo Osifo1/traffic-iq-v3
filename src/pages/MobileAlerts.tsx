@@ -158,7 +158,7 @@ const MobileAlerts = ({ user }: MobileAlertsProps) => {
   const activeAlertsCount = getActiveAlertsCount();
 
   return (
-    <div className="min-h-screen bg-background p-4 space-y-6">
+    <div className="min-h-screen bg-background p-4 lg:p-6 space-y-6">
       {/* Header with Alert Banner */}
       <div className="space-y-4">
         <div className="text-center">
